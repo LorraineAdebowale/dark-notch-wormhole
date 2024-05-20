@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Tree</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Spinner animation */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Spinner styles */
+    .spinner {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-10">
+  <div id="article" class="w-full max-w-4xl mx-auto flex flex-col items-center">
+    <!-- Data will be inserted here -->
+  </div>
+
+  <!-- Add new link button -->
+  <button id="addLinkButton" class="text-xl mb-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded-full w-1/2 text-center mt-4 shadow-md">
+    Add new link to the LinkTree
+  </button>
+
+  <!-- Popup -->
+  <div id="popup" style="display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+    <div style="position: relative; width: 65%; height: 65%; margin: auto; background: white; padding: 20px;">
+      <!-- Close button -->
+      <button id="closeButton" style="position: absolute; right: 20px; top: 20px;">X</button>
+      <!-- Loading spinner -->
+      <div id="spinner" class="spinner"></div>
+      <!-- Inspirational quote -->
+      <p id="quote">"The only way to do great work is to love what you do." - Steve Jobs</p>
+      <iframe id="iframe" src="https://wvlj2ckt.nocodb.com/#/nc/form/a99b9d82-e8a5-4e58-9365-0fe7687840a1/survey" width="100%" height="100%" style="border: none; display: none;"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const options = {
+      method: 'GET',
+      headers: {
+        'xc-token': '8EdAEbDrQmkggQ7fLVsm4q50BCkG5zcWzk__NHHr' // replace 'sample_token' with your actual token
+      }
+    };
+
+    fetch('https://app.nocodb.com/api/v2/tables/mmn5z3iy0lxu9y2/records?offset=0&limit=25&where=&viewId=vwnp1o0v9htcwfwo', options)
+      .then(response => response.json())
+      .then(response => {
+        if (response.list) {
+          const article = document.getElementById('article');
+          response.list.forEach(item => {
+            const link = document.createElement('a');
+            link.href = item.Link;
+            link.textContent = item.Title;
+            link.className = 'text-xl mb-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded-full w-full text-center shadow-md';
+            article.appendChild(link);
+          });
+        } else {
+          console.error('No list found in the response');
+        }
+      })
+      .catch(err => console.error(err));
+
+    // Get the button, popup, close button, spinner, quote, and iframe elements
+    const addLinkButton = document.getElementById('addLinkButton');
+    const popup = document.getElementById('popup');
+    const closeButton = document.getElementById('closeButton');
+    const spinner = document.getElementById('spinner');
+    const quote = document.getElementById('quote');
+    const iframe = document.getElementById('iframe');
+
+    // Add click event listener to the add link button
+    addLinkButton.addEventListener('click', () => {
+      // Show the popup, spinner, and quote when the button is clicked
+      popup.style.display = 'block';
+      spinner.style.display = 'block';
+      quote.style.display = 'block';
+    });
+
+    // Add click event listener to the close button
+    closeButton.addEventListener('click', () => {
+      // Hide the popup, spinner, quote, and iframe when the close button is clicked
+      popup.style.display = 'none';
+      spinner.style.display = 'none';
+      quote.style.display = 'none';
+      iframe.style.display = 'none';
+    });
+
+    // Add load event listener to the iframe
+    iframe.addEventListener('load', () => {
+      // Hide the spinner and quote, and show the iframe when it has finished loading
+      spinner.style.display = 'none';
+      quote.style.display = 'none';
+      iframe.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

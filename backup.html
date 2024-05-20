@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Tree</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-10">
+  <div id="article" class="w-full max-w-4xl mx-auto flex flex-col items-center">
+    <!-- Data will be inserted here -->
+  </div>
+
+  <script>
+    const options = {
+      method: 'GET',
+      headers: {
+        'xc-token': '8EdAEbDrQmkggQ7fLVsm4q50BCkG5zcWzk__NHHr' // replace 'sample_token' with your actual token
+      }
+    };
+
+    fetch('https://app.nocodb.com/api/v2/tables/mmn5z3iy0lxu9y2/records?offset=0&limit=25&where=&viewId=vwnp1o0v9htcwfwo', options)
+      .then(response => response.json())
+      .then(response => {
+        if (response.list) {
+          const article = document.getElementById('article');
+          response.list.forEach(item => {
+            const link = document.createElement('a');
+            link.href = item.Link;
+            link.textContent = item.Title;
+            link.className = 'text-2xl mb-4 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full text-center';
+            article.appendChild(link);
+          });
+        } else {
+          console.error('No list found in the response');
+        }
+      })
+      .catch(err => console.error(err));
+  </script>
+</body>
+</html>
